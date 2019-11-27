@@ -11,7 +11,7 @@
     }
     "Files"
     {
-            "Plugin"    "/addons/sourcemod/plugins/tf2FallDmgFix.smx"
-            "Source"    "/addons/sourcemod/scripting/tf2FallDmgFix.sp"
+        "Plugin"    "/addons/sourcemod/plugins/tf2FallDmgFix.smx"
+        "Source"    "/addons/sourcemod/scripting/tf2FallDmgFix.sp"
     }
 }

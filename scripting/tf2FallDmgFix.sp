@@ -3,8 +3,11 @@
 #include <sourcemod>
 #include <sdkhooks>
 #include <sdktools>
+#include <updater>
 
-#define PLUGIN_VERSION      "0.0.6"
+#define PLUGIN_VERSION      "0.0.7"
+
+#define UPDATE_URL	"https://raw.githubusercontent.com/stephanieLGBT/tf2-FallDamageFixer/master/updatefile.txt"
 
 public Plugin:myinfo =
 {
@@ -13,11 +16,16 @@ public Plugin:myinfo =
     description             = "removes randomness from fall damage in tf2",
     version                 =  PLUGIN_VERSION,
     url                     = "https://stephanie.lgbt"
-};
+}
+
+/*----------  Autoupdater  ----------*/
 
 public OnPluginStart()
 {
-
+    if (LibraryExists("updater"))
+    {
+        Updater_AddPlugin(UPDATE_URL);
+    }
 }
 
 /*----------  Hook / Unhook SDK Stuff  ----------*/

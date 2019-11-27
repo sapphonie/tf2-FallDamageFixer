@@ -1,0 +1,15 @@
+"Updater" {
+    "Information"
+    {
+        "Version"
+        {
+            "Latest"    "0.0.7"
+        }
+        "Notes" "Check the github for the latest updates!"
+        "Notes" "https://github.com/stephanieLGBT/tf2-FallDamageFixer"
+    }
+    "Files"
+    {
+            "Plugin"    "/addons/sourcemod/plugins/tf2FallDmgFix.smx"
+            "Source"    "/addons/sourcemod/scripting/tf2FallDmgFix.sp"
+    }

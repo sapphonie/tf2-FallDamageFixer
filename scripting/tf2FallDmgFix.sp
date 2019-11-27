@@ -3,9 +3,11 @@
 #include <sourcemod>
 #include <sdkhooks>
 #include <sdktools>
+#undef REQUIRE_PLUGIN
+// updater isn't REQUIRED but it is strongly recommended
 #include <updater>
 
-#define PLUGIN_VERSION      "0.0.7"
+#define PLUGIN_VERSION      "0.0.8"
 
 #define UPDATE_URL	"https://raw.githubusercontent.com/stephanieLGBT/tf2-FallDamageFixer/master/updatefile.txt"
 

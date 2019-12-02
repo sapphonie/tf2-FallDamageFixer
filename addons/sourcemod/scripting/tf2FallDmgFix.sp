@@ -7,7 +7,7 @@
 // updater isn't REQUIRED but it is strongly recommended
 #include <updater>
 
-#define PLUGIN_VERSION      "0.0.8"
+#define PLUGIN_VERSION      "0.0.9"
 
 #define UPDATE_URL	"https://raw.githubusercontent.com/stephanieLGBT/tf2-FallDamageFixer/master/updatefile.txt"
 

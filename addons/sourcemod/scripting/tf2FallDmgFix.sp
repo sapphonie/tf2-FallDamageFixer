@@ -54,22 +54,16 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
     if (damagetype == DMG_FALL)
     {
         float vVec = GetEntPropFloat(victim, Prop_Send, "m_flFallVelocity");
-        // velocity HAS to be over 650 hu/s or we don't want fall dmg. this SHOULD get checked by the game but Just In Case...
-        if (vVec > 650)
-        {
-            // original dmg formula
-            float FallDamage    = 5 * (vVec / 300);
-
-            // scale dmg according to maxhealth
-            float FallRatio     = GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iMaxHealth", _, victim) / 100.0;
-            FallDamage          = FallDamage * FallRatio;
-
-            // randomness would go here but we dont want that, just dmg the client nonrandomly here instead
-            SDKHooks_TakeDamage(victim, 0, 0, FallDamage, DMG_FALL, -1, NULL_VECTOR, NULL_VECTOR);
-
-            // we're done, don't let the game handle the fall dmg because we just did
-            return Plugin_Stop;
-        }
+        // velocity is supposed to be over 650 hu/s but double checking for that breaks some kill planes
+        // original dmg formula
+        float FallDamage    = 5 * (vVec / 300);
+        // scale dmg according to maxhealth
+        float FallRatio     = GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iMaxHealth", _, victim) / 100.0;
+        FallDamage          = FallDamage * FallRatio;
+        // randomness would go here but we dont want that, just dmg the client nonrandomly here instead
+        SDKHooks_TakeDamage(victim, 0, 0, FallDamage, DMG_FALL, -1, NULL_VECTOR, NULL_VECTOR);
+        // we're done, don't let the game handle the fall dmg because we just did
+        return Plugin_Stop;
     }
     return Plugin_Continue;
 }

@@ -7,9 +7,12 @@
 // updater isn't REQUIRED but it is strongly recommended
 #include <updater>
 
-#define PLUGIN_VERSION      "0.0.9"
+#define PLUGIN_VERSION      "0.0.11"
 
-#define UPDATE_URL	"https://raw.githubusercontent.com/stephanieLGBT/tf2-FallDamageFixer/master/updatefile.txt"
+#define UPDATE_URL  "https://raw.githubusercontent.com/stephanieLGBT/tf2-FallDamageFixer/master/updatefile.txt"
+
+// global floata for vertical velocity
+new Float:vVec = 0.0;
 
 public Plugin:myinfo =
 {
@@ -51,10 +54,17 @@ public OnClientDisconnect_Post(client)
 
 public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damagetype)
 {
-    if (damagetype == DMG_FALL)
+    vVec = GetEntPropFloat(victim, Prop_Send, "m_flFallVelocity");
+    // this prevents us hooking triggered fall dmg
+    // the original dmg formula doesn't do fall dmg at or below 650 hu/s so if fall dmg is triggered there it's likely a trigger_hurt. let the game handle that. if not...
+    // ...it'll be an edge case, so get the max fall dmg value and if the damage is above THAT then let the game handle it.
+    // max velocity for a player in tf2 is 3500, 210 is the result of the below formula with that plugged in for Heavy's max health (without overheal) + the MAXIMUM POSSIBLE 20% random variance.
+    if (vVec > 650 || damagetype == DMG_FALL && damage > 210)
     {
-        float vVec = GetEntPropFloat(victim, Prop_Send, "m_flFallVelocity");
-        // velocity is supposed to be over 650 hu/s but double checking for that breaks some kill planes
+        return Plugin_Continue;
+    }
+    else if (damagetype == DMG_FALL)
+    {
         // original dmg formula
         float FallDamage    = 5 * (vVec / 300);
         // scale dmg according to maxhealth

@@ -7,7 +7,7 @@
 // updater isn't REQUIRED but it is strongly recommended
 #include <updater>
 
-#define PLUGIN_VERSION      "0.0.11"
+#define PLUGIN_VERSION      "0.0.12"
 
 #define UPDATE_URL  "https://raw.githubusercontent.com/stephanieLGBT/tf2-FallDamageFixer/master/updatefile.txt"
 
@@ -59,7 +59,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damage
     // the original dmg formula doesn't do fall dmg at or below 650 hu/s so if fall dmg is triggered there it's likely a trigger_hurt. let the game handle that. if not...
     // ...it'll be an edge case, so get the max fall dmg value and if the damage is above THAT then let the game handle it.
     // max velocity for a player in tf2 is 3500, 210 is the result of the below formula with that plugged in for Heavy's max health (without overheal) + the MAXIMUM POSSIBLE 20% random variance.
-    if (vVec > 650 || damagetype == DMG_FALL && damage > 210)
+    if (vVec < 650 || damagetype == DMG_FALL && damage > 210)
     {
         return Plugin_Continue;
     }

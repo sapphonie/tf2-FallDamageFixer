@@ -1,17 +1,17 @@
+## Tf2 Fall Damage Fixer
+
 removes randomness in tf2's fall dmg by recalculating fall dmg according to tf2s source code WITHOUT adding the random +/- 20%
 
 uses sdkhooks and sdktools
 
-~~this is in mega beta and i dont know how laggy or functional it will be. currently 0.0.5 works perfectly but i've only tested it with a single person (me) in a server.~~
+latest version here: https://github.com/stephanieLGBT/tf2-FallDamageFixer/releases/latest
 
-~~i make no guaruntees about its stability.~~
+### Installation:
 
-0.0.6 works perfectly fine on a 12 player server, not tested with highlander yet
+* extract zip from releases
+* drag addons folder into your tf folder thru ftp
 
-todo:
+### Known bugs:
 
-* add updater
+* On plugin reload every player has to rejoin the server for sdktools to rehook them as an entity. This only applies if you manually reload the plugin thru `sm plugins reload tf2FallDmgFix`
 
-Known bugs:
-
-* on plugin reload every player has to rejoin the server for sdktools to rehook them as an entity

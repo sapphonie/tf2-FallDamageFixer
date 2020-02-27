@@ -7,23 +7,19 @@
 // updater isn't REQUIRED but it is strongly recommended
 #include <updater>
 
-#define PLUGIN_VERSION      "0.0.12"
-
-#define UPDATE_URL  "https://raw.githubusercontent.com/stephanieLGBT/tf2-FallDamageFixer/master/updatefile.txt"
-
-// global floata for vertical velocity
-new Float:vVec = 0.0;
+#define PLUGIN_VERSION      "0.0.15"
+#define UPDATE_URL          "https://raw.githubusercontent.com/stephanieLGBT/tf2-FallDamageFixer/master/updatefile.txt"
 
 public Plugin:myinfo =
 {
-    name                    = "Fall Damage Fixer",
+    name                    = "Fall Damage Derandomizer",
     author                  = "stephanie",
-    description             = "removes randomness from fall damage in tf2",
+    description             = "removes randomness from fall damage in tf2 if tf_damage_disablespread is set to 1",
     version                 =  PLUGIN_VERSION,
     url                     = "https://stephanie.lgbt"
 }
 
-/*----------  Autoupdater  ----------*/
+/*----------  Plugin Start  ----------*/
 
 public OnPluginStart()
 {
@@ -31,20 +27,46 @@ public OnPluginStart()
     {
         Updater_AddPlugin(UPDATE_URL);
     }
+    HookConVarChange(FindConVar("tf_damage_disablespread"), DamageSpreadHook);
+    DoSdkStuff();
 }
 
-/*----------  Hook / Unhook SDK Stuff  ----------*/
+/*----------  Handle convar changes  ----------*/
+
+public DamageSpreadHook(ConVar convar, const char[] oldValue, const char[] newValue)
+{
+    DoSdkStuff();
+}
+
+/*----------  SDK Stuff  ----------*/
+
+DoSdkStuff()
+{
+    for (int client = 1; client <= MaxClients; client++)
+    {
+        // don't hook fake or nonconnected clients
+        if (IsClientInGame(client) && !IsFakeClient(client))
+        {
+            // only hook if tf_damage_disablespread is 1
+            if (GetConVarBool(FindConVar("tf_damage_disablespread")))
+            {
+                SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
+            }
+            else if (!GetConVarBool(FindConVar("tf_damage_disablespread")))
+            {
+                SDKUnhook(client, SDKHook_OnTakeDamage, OnTakeDamage);
+            }
+        }
+    }
+}
 
 // player fully in server
 public OnClientPostAdminCheck(client)
 {
-    SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
-}
-
-// player fully out of server
-public OnClientDisconnect_Post(client)
-{
-    SDKUnhook(client, SDKHook_OnTakeDamage, OnTakeDamage);
+    if (GetConVarBool(FindConVar("tf_damage_disablespread")))
+    {
+        SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
+    }
 }
 
 /*----------  Actually do the calculation here  ----------*/
@@ -54,16 +76,16 @@ public OnClientDisconnect_Post(client)
 
 public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:damage, &damagetype)
 {
-    vVec = GetEntPropFloat(victim, Prop_Send, "m_flFallVelocity");
-    // this prevents us hooking triggered fall dmg
+    float vVec = GetEntPropFloat(victim, Prop_Send, "m_flFallVelocity");
+    // this part prevents us hooking triggered fall dmg.
     // the original dmg formula doesn't do fall dmg at or below 650 hu/s so if fall dmg is triggered there it's likely a trigger_hurt. let the game handle that. if not...
     // ...it'll be an edge case, so get the max fall dmg value and if the damage is above THAT then let the game handle it.
     // max velocity for a player in tf2 is 3500, 210 is the result of the below formula with that plugged in for Heavy's max health (without overheal) + the MAXIMUM POSSIBLE 20% random variance.
-    if (vVec < 650 || damagetype == DMG_FALL && damage > 210)
+    if (vVec < 650 || damagetype & DMG_FALL && damage > 210)
     {
         return Plugin_Continue;
     }
-    else if (damagetype == DMG_FALL)
+    else if (damagetype & DMG_FALL)
     {
         // original dmg formula
         float FallDamage    = 5 * (vVec / 300);

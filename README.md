@@ -13,5 +13,5 @@ latest version here: https://github.com/stephanieLGBT/tf2-FallDamageFixer/releas
 
 ### Known bugs:
 
-* On plugin reload every player has to rejoin the server for sdktools to rehook them as an entity. This only applies if you manually reload the plugin thru `sm plugins reload tf2FallDmgFix`
+~~* On plugin reload every player has to rejoin the server for sdktools to rehook them as an entity. This only applies if you manually reload the plugin thru `sm plugins reload tf2FallDmgFix`~~ should be fixed
 

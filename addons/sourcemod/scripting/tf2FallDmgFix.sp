@@ -7,7 +7,7 @@
 // updater isn't REQUIRED but it is strongly recommended
 #include <updater>
 
-#define PLUGIN_VERSION      "0.0.15"
+#define PLUGIN_VERSION      "0.0.16"
 #define UPDATE_URL          "https://raw.githubusercontent.com/stephanieLGBT/tf2-FallDamageFixer/master/updatefile.txt"
 
 public Plugin:myinfo =
@@ -29,6 +29,16 @@ public OnPluginStart()
     }
     HookConVarChange(FindConVar("tf_damage_disablespread"), DamageSpreadHook);
     DoSdkStuff();
+}
+
+/*----------  Updater Stuff  ----------*/
+
+public OnLibraryAdded(const String:name[])
+{
+    if (StrEqual(name, "updater"))
+    {
+        Updater_AddPlugin(UPDATE_URL);
+    }
 }
 
 /*----------  Handle convar changes  ----------*/

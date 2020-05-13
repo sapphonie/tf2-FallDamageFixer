@@ -15,3 +15,6 @@ latest version here: https://github.com/stephanieLGBT/tf2-FallDamageFixer/releas
 
 ~~* On plugin reload every player has to rejoin the server for sdktools to rehook them as an entity. This only applies if you manually reload the plugin thru `sm plugins reload tf2FallDmgFix`~~ should be fixed
 
+### shoutouts to twiikuu
+
+this plugin as a concept (deterministic fall dmg) is included in twiikuu's [tf2 comp fixes](https://github.com/ldesgoui/tf2-comp-fixes) plugin. cheers twiikuu!
